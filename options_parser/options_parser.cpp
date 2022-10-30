@@ -11,9 +11,6 @@ command_line_options_t::command_line_options_t() {
     opt_conf.add_options()
             ("help,h",
              "Show help message")
-            ("A_flag,A",
-             "All invisible characters, except for whitespaces, "
-             "should be displayed as their hexadecimal codes")
             ;
 }
 
