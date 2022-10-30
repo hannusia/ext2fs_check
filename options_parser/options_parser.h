@@ -25,7 +25,7 @@ public:
     command_line_options_t& operator=(command_line_options_t&&) = delete;
     ~command_line_options_t() = default;
 
-    [[nodiscard]] std::vector<std::string> get_filenames() const { return filesystems; };
+    [[nodiscard]] std::vector<std::string> get_filesystems() const { return filesystems; };
     [[nodiscard]] bool get_A_flag() const { return A_flag; };
 
     void parse(int ac, char **av);
