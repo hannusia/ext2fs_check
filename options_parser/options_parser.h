@@ -35,7 +35,7 @@ private:
 
     boost::program_options::variables_map var_map{};
     boost::program_options::options_description opt_conf{
-            "Config File Options:\n\tmycat [-h|--help] [-A_flag] <file1> <file2> ... <fileN>\n"};
+            "Config File Options:\n\text2fs_check [-h|--help] <filesystem>\n"};
 };
 
 #endif //EXT2FS_CHECK_OPTIONS_PARSER_H
