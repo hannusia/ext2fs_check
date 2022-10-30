@@ -60,13 +60,16 @@ int check_filesystem(const std::string & filesystem) {
 int main(int argc, char* argv[]) {
     struct ext2_super_block super;
     struct ext2_group_desc group;
+    std::string filesystem;
     int fd;
 
     command_line_options_t command_line_options{argc, argv};
     std::vector<std::string> filesystems = command_line_options.get_filesystems();
 
-    for (auto filesystem:filesystems) {
-
+    if (filesystems.size() != 1) {
+        std::cerr << "Wrong number of arguments (no slay)" << std::endl;
     }
+
+    filesystem = filesystems[0];
     return 0;
 }
