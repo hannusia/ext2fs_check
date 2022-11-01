@@ -25,13 +25,11 @@ int check_filesystem(const std::string & filesystem) {
     }
 
     if ((fseek_res = fseek(fp, base_offset, SEEK_SET)) != 0) {
-//        std::cout << fseek_res << std::endl;
         std::cerr << "Fseek super block error (no slay)" << std::endl;
         return -2;
     }
 
     if ((read_res = fread(&super, 1, sizeof(super), fp)) != sizeof(super)) {
-//        std::cout << read_res << " " << sizeof(super) << std::endl;
         std::cerr << "Reading super block error (no slay)" << std::endl;
         return -3;
     }
@@ -43,16 +41,23 @@ int check_filesystem(const std::string & filesystem) {
 
     block_size = 1024 << super.s_log_block_size;
 
-    if ((fseek_res = fseek(fp, base_offset + block_size, SEEK_SET)) != 0) {
-//        std::cout << fseek_res << std::endl;
+    if ((fseek_res = fseek(fp, 2*base_offset, SEEK_SET)) != 0) {
         std::cerr << "Fseek group block error (no slay)" << std::endl;
         return -2;
     }
     if ((read_res = fread(&group, 1, sizeof(group), fp)) != sizeof(group)) {
-//        std::cout << read_res << " " << sizeof(group) << std::endl;
         std::cerr << "Reading group block error (no slay)" << std::endl;
         return -3;
     }
+
+    std::cout << "Reading first group-descriptor from device " << filesystem << ": " << std::endl;
+    std::cout << "Blocks bitmap block: " << group.bg_block_bitmap << std::endl;
+    std::cout << "Inodes bitmap block: " << group.bg_inode_bitmap << std::endl;
+    std::cout << "Inodes table block : " << group.bg_inode_table << std::endl;
+    std::cout << "Free blocks count  : " << group.bg_free_blocks_count << std::endl;
+    std::cout << "Free inodes count  : " << group.bg_free_inodes_count << std::endl;
+    std::cout << "Directories count  : " << group.bg_used_dirs_count << std::endl;
+
     fclose(fp);
     return 0;
 };
@@ -71,5 +76,6 @@ int main(int argc, char* argv[]) {
     }
 
     filesystem = filesystems[0];
+    check_filesystem(filesystem);
     return 0;
 }
