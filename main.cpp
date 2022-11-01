@@ -50,13 +50,19 @@ int check_filesystem(const std::string & filesystem) {
         return -3;
     }
 
-    std::cout << "Reading first group-descriptor from device " << filesystem << ": " << std::endl;
-    std::cout << "Blocks bitmap block: " << group.bg_block_bitmap << std::endl;
-    std::cout << "Inodes bitmap block: " << group.bg_inode_bitmap << std::endl;
-    std::cout << "Inodes table block : " << group.bg_inode_table << std::endl;
-    std::cout << "Free blocks count  : " << group.bg_free_blocks_count << std::endl;
-    std::cout << "Free inodes count  : " << group.bg_free_inodes_count << std::endl;
-    std::cout << "Directories count  : " << group.bg_used_dirs_count << std::endl;
+    std::cout << "Getting information about " << filesystem << ": " << std::endl;
+    std::cout << "Inodes count          : " << super.s_inodes_count << std::endl;
+    std::cout << "Blocks count          : " << super.s_blocks_count << std::endl;
+    std::cout << "Num of reserved blocks: " << super.s_r_blocks_count << std::endl;
+    std::cout << "Num of free blocks    : " << super.s_free_blocks_count << std::endl;
+    std::cout << "Num of free inodes    : " << super.s_free_inodes_count << std::endl;
+    std::cout << "Blocks per group      : " << super.s_blocks_per_group << std::endl;
+    std::cout << "Blocks bitmap block   : " << group.bg_block_bitmap << std::endl;
+    std::cout << "Inodes bitmap block   : " << group.bg_inode_bitmap << std::endl;
+    std::cout << "Inodes table block    : " << group.bg_inode_table << std::endl;
+    std::cout << "Free blocks count     : " << group.bg_free_blocks_count << std::endl;
+    std::cout << "Free inodes count     : " << group.bg_free_inodes_count << std::endl;
+    std::cout << "Directories count     : " << group.bg_used_dirs_count << std::endl;
 
     fclose(fp);
     return 0;
