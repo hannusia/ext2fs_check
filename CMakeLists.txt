@@ -3,7 +3,7 @@ project(ext2fs_check)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(${PROJECT_NAME} main.cpp options_parser/options_parser.cpp options_parser/options_parser.h)
+add_executable(${PROJECT_NAME} main.cpp options_parser/options_parser.cpp options_parser/options_parser.h help_funcs.cpp help_funcs.h)
 
 target_include_directories(${PROJECT_NAME} PRIVATE options_parser)
 
