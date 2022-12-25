@@ -27,7 +27,5 @@ int main(int argc, char* argv[]) {
     filesystem.file_ptr = fp;
     filesystem.filename = filesystem_name.c_str();
 
-    check_filesystem(&filesystem);
-
-    return 0;
+    return check_filesystem(&filesystem);
 }

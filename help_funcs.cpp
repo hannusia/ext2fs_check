@@ -13,14 +13,28 @@ int check_filesystem_size (file_entry* filesystem, ext2_super_block* super_block
     size_t block_size = 1024 << super_block->s_log_block_size;
     size_t actual_size = super_block->s_blocks_count * block_size;
     if (filesystem_size < actual_size) {
+        std::cerr << "Wrong filesystem size" << std::endl;
         return -1;
     }
+    std::cout << "Correct filesystem size" << std::endl;
     return 0;
+}
+
+int check_num_blocks (ext2_super_block* super_block) {
+    auto block_num_blocks = std::ceil(static_cast<double>(super_block->s_blocks_count) / static_cast<double>(super_block->s_blocks_per_group));
+    auto block_num_inodes = std::ceil(static_cast<double>(super_block->s_inodes_count) / static_cast<double>(super_block->s_inodes_per_group));
+    if (block_num_blocks == block_num_inodes) {
+        std::cout << "Correct number of blocks" << std::endl;
+        return 0;
+    }
+    std::cerr << "Wrong number of blocks" << std::endl;
+    return -1;
 }
 
 
 int check_filesystem (file_entry* filesystem) {
     int fseek_res;
+    int exit_code = 0;
     size_t read_res;
     size_t block_size = 0;
     FILE* fp = filesystem->file_ptr;
@@ -62,5 +76,7 @@ int check_filesystem (file_entry* filesystem) {
         return -3;
     }
 
-    std::cout << check_filesystem_size(filesystem, &super) << std::endl;
+    exit_code += check_filesystem_size(filesystem, &super);
+    exit_code += check_num_blocks(&super);
+    return exit_code;
 }
