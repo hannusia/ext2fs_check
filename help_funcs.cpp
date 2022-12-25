@@ -21,8 +21,10 @@ int check_filesystem_size (file_entry* filesystem, ext2_super_block* super_block
 }
 
 int check_num_blocks (ext2_super_block* super_block) {
-    auto block_num_blocks = std::ceil(static_cast<double>(super_block->s_blocks_count) / static_cast<double>(super_block->s_blocks_per_group));
-    auto block_num_inodes = std::ceil(static_cast<double>(super_block->s_inodes_count) / static_cast<double>(super_block->s_inodes_per_group));
+    auto block_num_blocks = std::ceil(static_cast<double>(super_block->s_blocks_count) /
+            static_cast<double>(super_block->s_blocks_per_group));
+    auto block_num_inodes = std::ceil(static_cast<double>(super_block->s_inodes_count) /
+            static_cast<double>(super_block->s_inodes_per_group));
     if (block_num_blocks == block_num_inodes) {
         std::cout << "Correct number of blocks" << std::endl;
         return 0;
@@ -31,6 +33,23 @@ int check_num_blocks (ext2_super_block* super_block) {
     return -1;
 }
 
+int check_total_num_inodes (ext2_super_block* super_block) {
+    if (super_block->s_inodes_count >= super_block->s_free_inodes_count) {
+        std::cout << "Correct total & free number of inodes" << std::endl;
+        return 0;
+    }
+    std::cerr << "Total number of inodes is smaller than number of free inodes" << std::endl;
+    return -1;
+}
+
+int check_total_num_blocks (ext2_super_block* super_block) {
+    if (super_block->s_blocks_count >= super_block->s_free_blocks_count) {
+        std::cout << "Correct total & free number of blocks" << std::endl;
+        return 0;
+    }
+    std::cerr << "Total number of blocks is smaller than number of free blocks" << std::endl;
+    return -1;
+}
 
 int check_filesystem (file_entry* filesystem) {
     int fseek_res;
@@ -78,5 +97,7 @@ int check_filesystem (file_entry* filesystem) {
 
     exit_code += check_filesystem_size(filesystem, &super);
     exit_code += check_num_blocks(&super);
+    exit_code += check_total_num_inodes(&super);
+    exit_code += check_total_num_blocks(&super);
     return exit_code;
 }
