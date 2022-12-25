@@ -20,6 +20,7 @@ struct file_entry {
 
 constexpr size_t base_offset = 1024;
 int check_filesystem_size (file_entry* filesystem, ext2_super_block* super_block);
+int check_group_size (ext2_super_block* super_block);
 int check_num_blocks (ext2_super_block* super_block);
 int check_total_num_inodes (ext2_super_block* super_block);
 int check_total_num_blocks (ext2_super_block* super_block);

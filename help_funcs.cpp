@@ -20,6 +20,19 @@ int check_filesystem_size (file_entry* filesystem, ext2_super_block* super_block
     return 0;
 }
 
+int check_group_size (ext2_super_block* super_block) {
+    size_t block_size = 1024 << super_block->s_log_block_size;
+    size_t fragment_size = 1024 << super_block->s_log_cluster_size;
+    auto group_size_blocks = block_size * super_block->s_blocks_per_group;
+    auto group_size_fragments = fragment_size * super_block->s_clusters_per_group;
+    if (group_size_blocks != group_size_fragments) {
+        std::cerr << "Wrong group size" << std::endl;
+        return -1;
+    }
+    std::cout << "Correct group size" << std::endl;
+    return 0;
+}
+
 int check_num_blocks (ext2_super_block* super_block) {
     auto block_num_blocks = std::ceil(static_cast<double>(super_block->s_blocks_count) /
             static_cast<double>(super_block->s_blocks_per_group));
@@ -64,13 +77,12 @@ int check_filesystem (file_entry* filesystem) {
     int fseek_res;
     int exit_code = 0;
     size_t read_res;
-    size_t block_size = 0;
     FILE* fp = filesystem->file_ptr;
 
     //--------------------------------------------------------------------------
     //  Get super block info
     //--------------------------------------------------------------------------
-    struct ext2_super_block super;
+    struct ext2_super_block super = {};
 
     if ((fseek_res = fseek(fp, base_offset, SEEK_SET)) != 0) {
         std::cerr << "Fseek super block error (no slay)" << std::endl;
@@ -90,14 +102,7 @@ int check_filesystem (file_entry* filesystem) {
     //--------------------------------------------------------------------------
     //  Get group block info
     //--------------------------------------------------------------------------
-    struct ext2_group_desc group;
-
-    block_size = 1024 << super.s_log_block_size;
-
-    if ((fseek_res = fseek(fp, block_size, SEEK_SET)) != 0) {
-        std::cerr << "Fseek group block error (no slay)" << std::endl;
-        return -2;
-    }
+    struct ext2_group_desc group = {};
 
     if ((read_res = fread(&group, 1, sizeof(group), fp)) != sizeof(group)) {
         std::cerr << "Reading group block error (no slay)" << std::endl;
@@ -105,9 +110,17 @@ int check_filesystem (file_entry* filesystem) {
     }
 
     exit_code += check_filesystem_size(filesystem, &super);
+    exit_code += check_group_size(&super);
     exit_code += check_num_blocks(&super);
     exit_code += check_total_num_inodes(&super);
     exit_code += check_total_num_blocks(&super);
     exit_code += check_reserved_num_blocks(&super);
+
+    // state contains information about errors: 1 means no errors, 2 means errors in filesystem
+    if (exit_code == 0) {
+        super.s_state = 1;
+    } else {
+        super.s_state = 2;
+    }
     return exit_code;
 }
