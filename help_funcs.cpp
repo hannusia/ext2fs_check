@@ -51,6 +51,15 @@ int check_total_num_blocks (ext2_super_block* super_block) {
     return -1;
 }
 
+int check_reserved_num_blocks (ext2_super_block* super_block) {
+    if (super_block->s_blocks_count >= super_block->s_r_blocks_count) {
+        std::cout << "Correct total & reserved number of blocks" << std::endl;
+        return 0;
+    }
+    std::cerr << "Total number of blocks is smaller than number of reserved blocks" << std::endl;
+    return -1;
+}
+
 int check_filesystem (file_entry* filesystem) {
     int fseek_res;
     int exit_code = 0;
@@ -99,5 +108,6 @@ int check_filesystem (file_entry* filesystem) {
     exit_code += check_num_blocks(&super);
     exit_code += check_total_num_inodes(&super);
     exit_code += check_total_num_blocks(&super);
+    exit_code += check_reserved_num_blocks(&super);
     return exit_code;
 }
