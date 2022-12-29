@@ -103,11 +103,21 @@ int check_filesystem (file_entry* filesystem) {
     //  Get group block info
     //--------------------------------------------------------------------------
     struct ext2_group_desc group = {};
+    size_t block_size = 1024 << super.s_log_block_size;
+
+    if ((fseek_res = fseek(fp, block_size, SEEK_SET)) != 0) {
+        std::cerr << "Fseek group block error (no slay)" << std::endl;
+        return -2;
+    }
 
     if ((read_res = fread(&group, 1, sizeof(group), fp)) != sizeof(group)) {
         std::cerr << "Reading group block error (no slay)" << std::endl;
         return -3;
     }
+
+    std::cout << block_size << std::endl;
+
+    std::cout << group.bg_block_bitmap << std::endl;
 
     exit_code += check_filesystem_size(filesystem, &super);
     exit_code += check_group_size(&super);
