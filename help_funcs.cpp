@@ -73,6 +73,30 @@ int check_reserved_num_blocks (ext2_super_block* super_block) {
     return -1;
 }
 
+int check_num_blocks_per_group(ext2_super_block* super_block) {
+    unsigned int block_size = 1024 << super_block->s_log_block_size;
+    unsigned int calc_num_blocks_per_group = 8 * block_size;  // because block group block bitmap takes exactly one block
+    if (super_block->s_blocks_per_group <= calc_num_blocks_per_group) {
+        std::cout << "Correct count of blocks per group" << std::endl;
+        return 0;
+    }
+    return -1;
+}
+
+int check_num_inodes_per_group(ext2_super_block* super_block) {
+    unsigned int block_size = 1024 << super_block->s_log_block_size;
+    unsigned int calc_num_inodes_per_group = 8 * block_size;  // because block group inode bitmap takes exactly one block
+    if (super_block->s_inodes_per_group <= calc_num_inodes_per_group) {
+        std::cout << "Correct count of inodes per group" << std::endl;
+        return 0;
+    }
+    return -1;
+}
+
+bool is_block_used() {
+
+}
+
 int check_filesystem (file_entry* filesystem) {
     int fseek_res;
     int exit_code = 0;
@@ -99,6 +123,15 @@ int check_filesystem (file_entry* filesystem) {
         return -4;
     }
 
+    exit_code += check_filesystem_size(filesystem, &super);
+    exit_code += check_group_size(&super);
+    exit_code += check_num_blocks(&super);
+    exit_code += check_total_num_inodes(&super);
+    exit_code += check_total_num_blocks(&super);
+    exit_code += check_reserved_num_blocks(&super);
+    exit_code += check_num_blocks_per_group(&super);
+    exit_code += check_num_inodes_per_group(&super);
+
     //--------------------------------------------------------------------------
     //  Get group block info
     //--------------------------------------------------------------------------
@@ -115,16 +148,6 @@ int check_filesystem (file_entry* filesystem) {
         return -3;
     }
 
-    std::cout << block_size << std::endl;
-
-    std::cout << group.bg_block_bitmap << std::endl;
-
-    exit_code += check_filesystem_size(filesystem, &super);
-    exit_code += check_group_size(&super);
-    exit_code += check_num_blocks(&super);
-    exit_code += check_total_num_inodes(&super);
-    exit_code += check_total_num_blocks(&super);
-    exit_code += check_reserved_num_blocks(&super);
 
     // state contains information about errors: 1 means no errors, 2 means errors in filesystem
     if (exit_code == 0) {
