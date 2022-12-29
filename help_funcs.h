@@ -25,6 +25,12 @@ int check_num_blocks (ext2_super_block* super_block);
 int check_total_num_inodes (ext2_super_block* super_block);
 int check_total_num_blocks (ext2_super_block* super_block);
 int check_reserved_num_blocks (ext2_super_block* super_block);
+int check_num_blocks_per_group(ext2_super_block* super_block);
+int check_num_inodes_per_group(ext2_super_block* super_block);
+int check_num_fragments_per_group(ext2_super_block* super_block);
+int check_free_num (std::vector<char> &bitmap, uint16_t expected_free);
+int check_free_blocks_num (FILE* fp, ext2_group_desc* group, size_t block_size);
+int check_free_inodes_num (FILE* fp, ext2_group_desc* group, size_t block_size);
 int check_filesystem (file_entry* filesystem);
 
 #endif //EXT2FS_CHECK_HELP_FUNCS_H
