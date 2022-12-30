@@ -87,5 +87,3 @@ contains function that recursively iterates through filesystem tree
 
 ## run_check
 - `int check_filesystem (file_entry* filesystem)` -- main function with all checks;
-
-
