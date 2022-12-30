@@ -87,3 +87,9 @@ contains function that recursively iterates through filesystem tree
 
 ## run_check
 - `int check_filesystem (file_entry* filesystem)` -- main function with all checks;
+
+# This was team "SLAY"
+
+thank you for your attention!! if you have any suggestions or want to extend our project you can open pull request or contact us!!
+
+![slay](https://github.com/hannusia/ext2fs_check/blob/main/slay.gif)
