@@ -6,7 +6,7 @@ Authors: [Olha Liuba](https://github.com/oliuba), [Hanna Yershova](https://githu
 # Prerequisites:
 - CMake (3.23 minimum version)
 - Unix-like OS
-- ext2 partition or image
+- ext2 image
 - g++ compiler (C++20)
 
 # What it does:
