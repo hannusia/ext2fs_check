@@ -44,7 +44,7 @@ int check_filesystem (file_entry* filesystem) {
 
     exit_code += check_filesystem_size(filesystem, &super);
     exit_code += check_group_size(&super);
-    exit_code += check_num_blocks(&super);
+    exit_code += check_num_block_groups(&super);
     exit_code += check_total_num_inodes(&super);
     exit_code += check_total_num_blocks(&super);
     exit_code += check_reserved_num_blocks(&super);
@@ -53,7 +53,7 @@ int check_filesystem (file_entry* filesystem) {
     exit_code += check_num_fragments_per_group(&super);
     exit_code += check_free_blocks_num(fp, &group, block_size);
     exit_code += check_free_inodes_num(fp, &group, block_size);
-    exit_code += iterate_tree(fp, &group, block_size);
+    exit_code += iterate_tree(fp, &super, &group);
 
     // state contains information about errors: 1 means no errors, 2 means errors in filesystem
     if (exit_code == 0) {

@@ -25,16 +25,16 @@ int check_group_size (ext2_super_block* super_block) {
     return 0;
 }
 
-int check_num_blocks (ext2_super_block* super_block) {
+int check_num_block_groups (ext2_super_block* super_block) {
     auto block_num_blocks = std::ceil(static_cast<double>(super_block->s_blocks_count) /
                                       static_cast<double>(super_block->s_blocks_per_group));
     auto block_num_inodes = std::ceil(static_cast<double>(super_block->s_inodes_count) /
                                       static_cast<double>(super_block->s_inodes_per_group));
     if (block_num_blocks == block_num_inodes) {
-        std::cout << "Correct number of blocks" << std::endl;
+        std::cout << "Correct number of block groups" << std::endl;
         return 0;
     }
-    std::cerr << "Wrong number of blocks" << std::endl;
+    std::cerr << "Wrong number of block groups" << std::endl;
     return -1;
 }
 
