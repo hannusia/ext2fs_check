@@ -1,4 +1,4 @@
-#include "help_funcs.h"
+#include "run_check.h"
 
 int check_filesystem (file_entry* filesystem) {
     int fseek_res;
@@ -53,6 +53,7 @@ int check_filesystem (file_entry* filesystem) {
     exit_code += check_num_fragments_per_group(&super);
     exit_code += check_free_blocks_num(fp, &group, block_size);
     exit_code += check_free_inodes_num(fp, &group, block_size);
+    exit_code += iterate_tree(fp, &group, block_size);
 
     // state contains information about errors: 1 means no errors, 2 means errors in filesystem
     if (exit_code == 0) {

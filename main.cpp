@@ -1,4 +1,4 @@
-#include "help_funcs.h"
+#include "run_check.h"
 
 int main(int argc, char* argv[]) {
     struct ext2_super_block super;

@@ -79,7 +79,7 @@ int iterate_tree (FILE* fp, ext2_group_desc* group, size_t block_size) {
     slay_dir(fp, group, block_size, 2, checked);
     if (group->bg_used_dirs_count != checked.size()) {
         std::cerr << "Number of directories is wrong!" << std::endl;
-        return 1;
+        return -1;
     }
     std::cout << "Correct number of directories" << std::endl;
     return 0;
