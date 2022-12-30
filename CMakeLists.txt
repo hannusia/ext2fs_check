@@ -4,8 +4,8 @@ project(ext2fs_check)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(${PROJECT_NAME} main.cpp options_parser/options_parser.cpp options_parser/options_parser.h
-        run_check.cpp run_check.h check_super.cpp check_super.h file_entry.h check_group.cpp check_group.h
-        iterate_filesystem_tree.cpp iterate_filesystem_tree.h)
+        run_check/run_check.cpp run_check/run_check.h check_super/check_super.cpp check_super/check_super.h run_check/file_entry.h check_group/check_group.cpp check_group/check_group.h
+        iterate_fs/iterate_filesystem_tree.cpp iterate_fs/iterate_filesystem_tree.h)
 
 target_include_directories(${PROJECT_NAME} PRIVATE options_parser)
 

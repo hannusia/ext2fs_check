@@ -1,7 +1,7 @@
 #ifndef EXT2FS_CHECK_CHECK_SUPER_H
 #define EXT2FS_CHECK_CHECK_SUPER_H
 
-#include "file_entry.h"
+#include "../run_check/file_entry.h"
 #include <linux/fs.h>
 #include <ext2fs/ext2_fs.h>
 #include <fcntl.h>
